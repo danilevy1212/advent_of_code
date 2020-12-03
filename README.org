@@ -1,5 +1,5 @@
 #+TITLE: Solutions to Advent Of Code 2020
 
 It's a great time for coding! This are my solutions for the [[https://adventofcode.com/][advent of code]] 2020
-event. Each day I'll use a language I don't get to usally use or something I
+event. Each day I'll use a language I don't get to usually use or something I
 want to try out. Wish me luck!
