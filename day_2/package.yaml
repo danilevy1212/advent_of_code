@@ -1,0 +1,16 @@
+name: AdventOfCodeDay2
+version: 0.1.0.0
+
+dependencies:
+  - base >= 4.7 && < 5
+  - split
+
+source-dirs:
+  - src
+
+ghc-options: -Wall
+
+executables:
+  Day2:
+    main: Main.hs
+    source-dirs: src
