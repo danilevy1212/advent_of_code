@@ -3,10 +3,8 @@ module Main where
 
 import Data.List.Split (splitOn)
 import Data.Char (toLower, isAlpha)
-import Data.Maybe (mapMaybe)
+import Data.Maybe (mapMaybe, fromJust)
 import Text.Read (readMaybe)
-
-type Tokens = [String]
 
 data Password = Password
   { charMin :: Int,
@@ -30,42 +28,36 @@ getInput = do
 
 toPassword :: String -> Maybe Password
 toPassword line
-  | length tokens == 3 = maybePassword range charRest password
+  | length tokens == 3 = case isValid of
+      Just True -> record
+      _ -> Nothing
   | otherwise = Nothing
     where
       tokens = words line
-      range = getRange $ head tokens
-      charRest = getCharRestriction $ tokens !! 1
-      password = last tokens
-
-maybePassword :: Maybe (Int, Int) -> Maybe Char -> String -> Maybe Password
-maybePassword (Just (minChar, maxChar)) (Just char) pass =
-  if isValidPass then Just passRecord else Nothing
-  where
-    passRecord = Password
-          { charMin = minChar,
-            charMax = maxChar,
-            character = char,
-            text = pass
-          }
-    isValidPass = isPasswordValid passRecord
-maybePassword _ _ _ = Nothing
+      record = do
+        range <- getRange $ head tokens
+        charRest <- getCharRestriction $ tokens !! 1
+        password <- Just $ last tokens
+        Just Password {
+          charMin = fst range,
+          charMax = snd range,
+          character = charRest,
+          text = password
+        }
+      isValid = isPasswordValid <$> record
 
 getRange :: String -> Maybe (Int, Int)
 getRange a
-  | length ranges == 2 = maybeFirstEqOrSmallerThan (maxChar, minChar)
+  | length ranges == 2 = case isSmallerOrEqthan of
+      (Just True) -> Just (fromJust minChar, fromJust maxChar)
+      _ -> Nothing
   | otherwise = Nothing
   where
     ranges = splitOn "-" a
     intRanges = sequence $ readMaybe <$> ranges :: Maybe [Int]
-    maxChar = head <$> intRanges
-    minChar = last <$> intRanges
-
-maybeFirstEqOrSmallerThan :: Ord a => (Maybe a, Maybe a) -> Maybe (a, a)
-maybeFirstEqOrSmallerThan (Just x, Just y)
-  | x <= y = Just (x, y)
-  | otherwise = Nothing
-maybeFirstEqOrSmallerThan _ = Nothing
+    minChar = head <$> intRanges
+    maxChar = last <$> intRanges
+    isSmallerOrEqthan = (<=) <$> minChar <*> maxChar
 
 getCharRestriction :: String -> Maybe Char
 getCharRestriction "" = Nothing
