@@ -36,3 +36,10 @@ better-cache/
 stack*.yaml.lock
 node_modules/
 dist/
+
+debug/
+target/
+
+Cargo.lock
+
+**/*.rs.bk
