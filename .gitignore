@@ -34,3 +34,5 @@ tags
 .hspec-failures
 better-cache/
 stack*.yaml.lock
+node_modules/
+dist/
