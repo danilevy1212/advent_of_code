@@ -42,6 +42,7 @@ target/
 
 Cargo.lock
 
+
 **/*.rs.bk
 
 pom.xml
@@ -60,3 +61,13 @@ pom.xml.asc
 .cpcache/
 .lsp/
 .clj-kondo/
+
+*.sw?
+.direnv
+.gopath
+/direnv
+/direnv.test
+/dist
+/test/config
+/test/data
+/test/scenarios/inherited/.envrc
